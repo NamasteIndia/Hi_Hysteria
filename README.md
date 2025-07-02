@@ -97,8 +97,7 @@ There may be some bugs. If you encounter any, please report them via an issue. S
 ### Installation
 
 ```
-su - root # Switch to root user.
-bash <(curl -fsSL https://raw.githubusercontent.com/NamasteIndia/Hi_Hysteria/refs/heads/main/server/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/emptysuns/Hi_Hysteria/refs/heads/main/server/install.sh)
 ```
 
 ### Configuration Process
