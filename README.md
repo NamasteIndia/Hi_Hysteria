@@ -1,34 +1,37 @@
+Below is the translated `README.md` in English, maintaining the original structure and formatting as closely as possible:
+
+---
+
 # Hi Hysteria
 ##### (2025/06/09) 1.0.3
 
 ```
-兼容hysteria 2.6.2更新，新版本特性对tls ClientHello进行分片，抗封锁，不会再根据域名被UDP QoS
+Compatible with Hysteria 2.6.2 update. New features include TLS ClientHello fragmentation for enhanced anti-blocking, preventing UDP QoS based on domain names.
 
-1、兼容支持lxc与openvz虚拟化的服务器使用hihy安装hy2
-2、修复本地证书路径错误
-3、修复使用arch时hy2状态检测错误
-4、
-使用sniff嗅探域名来防止acl分流失败
-5、mode auto出站时禁用fastOpen, 会导致ipv4 only无法解析到v4的ip
+1. Compatible with servers using LXC and OpenVZ virtualization for installing hy2 with hihy.
+2. Fixed incorrect local certificate path.
+3. Fixed hy2 status detection error when using Arch.
+4. Use domain sniffing to prevent ACL routing failures.
+5. Disable fastOpen in `mode auto` outbound to avoid IPv4-only resolution issues.
 ```
 
-[历史改进](md/log.md)
+[Change Log](md/log.md)
 
-[Hysteria V1版本](https://github.com/emptysuns/Hi_Hysteria/tree/v1)
+[Hysteria V1 Version](https://github.com/emptysuns/Hi_Hysteria/tree/v1)
 
-## 一·简介
+## 1. Introduction
 
-> Hysteria2 是一个功能丰富的，专为恶劣网络环境进行优化的网络工具（双边加速），比如卫星网络、拥挤的公共 Wi-Fi、在**中国连接国外服务器**等。 基于修改版的 QUIC 协议。
-> 
-它很好的解决了在搭建富强魔法服务器时最大的痛点——**线路拉跨**。
+> Hysteria2 is a feature-rich network tool optimized for harsh network environments (dual-sided acceleration), such as satellite networks, congested public Wi-Fi, and **connecting to foreign servers from China**. It is based on a modified QUIC protocol.
+>
+> It effectively addresses the biggest pain point when setting up advanced proxy servers—**poor network quality**.
 
-1. CT直连落地JP NTT机房+cloudflare warp,无任何优化163线路，20-23点晚高峰测试speedtest。:
+1. Direct connection to a JP NTT data center + Cloudflare Warp, no optimization for China Telecom (163) lines, tested with Speedtest during peak hours (20:00–23:00):
 
-~~由于测试机器为lxc容器，因性能拉跨，CPU已经跑满，无法继续努力~~
+~~Due to the test machine being an LXC container with limited performance, the CPU was fully utilized and could not perform further.~~
 
 ![image](imgs/speed.png)
 
-2. 无对钟国大陆线路优化，洛杉矶shockhosting机房，1c128m ovznat 4k@p60：
+2. No optimization for mainland China routes, Los Angeles ShockHosting data center, 1-core 128MB OVZ NAT, 4K@60fps:
 
 ![image](imgs/yt.jpg)
 
@@ -36,74 +39,73 @@
 139783 Kbps
 ```
 
-**本仓库仅作学习用途，研究一种高抖动、高延迟网络环境的优化办法和解决方案，禁止用于违法行为，请遵守您所在地的法律。**
+**This repository is for learning purposes only, aimed at studying optimization methods and solutions for high-jitter, high-latency network environments. It is strictly prohibited for illegal activities. Please comply with the laws of your jurisdiction.**
 
-由它所引起的任何问题，作者并不承担风险和任何法律责任，请遵守GPL开源协议。
+The author assumes no risk or legal liability for any issues arising from its use. Please adhere to the GPL open-source license.
 
-可能会有一些bug，如果遇到请发issue，欢迎star，您的⭐是我维护的动力。
+There may be some bugs. If you encounter any, please report them via an issue. Stars are welcome—your ⭐ is my motivation to maintain this project.
 
-
-## 二、优点
+## 2. Advantages
 
 <details>
-<summary><b>点我展开查看完整功能列表</b></summary>
+<summary><b>Click to expand and view the complete feature list</b></summary>
 
-* 支持hysteria2提供的三种masquerade伪装模式，并提供高度自定义伪装内容
-* 提供四种证书导入方式：
-  * ACME HTTP挑战
+* Supports all three masquerade modes provided by Hysteria2 with highly customizable masquerade content.
+* Offers four certificate import methods:
+  * ACME HTTP challenge
   * ACME DNS
-  * 自签任意域名证书
-  * 本地证书
-* 支持在ssh终端查看hysteria2 server统计信息：
-  * 用户流量统计
-  * 在线设备数量
-  * 当前活跃的连接等信息
-* 提供仅通过ACL实现的分流域名规则，以及屏蔽相应域名的请求
-* 支持当前市面上所有主流的操作系统与架构：
-  * 操作系统：Arch、Alpine、RHEL、Centos、AlamaLinux、Debian、Ubuntu、Rocky Linux等
-  * 架构：x86_64、i386|i686、aarch64|arm64、armv7、s390x、ppc64le
-* 支持对hy2分享链接生成二维码输出到终端，减少繁琐的复制粘贴过程
-* 支持生成hysteria2 original client配置文件，保留最全的客户端参数
-* 使用高优先级启动hysteria2进程，保持速度优先
-* 端口跳跃与hysteria2的守护进程使用自启脚本管理，提供更强的拓展性与兼容性
-* 保留提供hysteria v1的安装脚本，供用户选择
-* 计算BDP（带宽延迟积）来调整quic参数，适应多种多样的需求场景
-* 支持添加socks5出站，包括自动添加warp出站功能
-* 支持lxc、openvz、kvm等现在的所有主流的虚拟化方式
-* 更新及时，hysteria2更新后24h内完成适配
+  * Self-signed certificate for any domain
+  * Local certificate
+* Supports viewing Hysteria2 server statistics in the SSH terminal:
+  * User traffic statistics
+  * Number of online devices
+  * Current active connections
+* Provides domain routing rules via ACL and blocks requests to specific domains.
+* Supports all mainstream operating systems and architectures:
+  * Operating Systems: Arch, Alpine, RHEL, CentOS, AlmaLinux, Debian, Ubuntu, Rocky Linux, etc.
+  * Architectures: x86_64, i386|i686, aarch64|arm64, armv7, s390x, ppc64le
+* Supports generating QR codes for hy2 share links in the terminal, reducing tedious copy-paste operations.
+* Supports generating Hysteria2 original client configuration files, retaining the most comprehensive client parameters.
+* Starts Hysteria2 processes with high priority to prioritize speed.
+* Manages port hopping and Hysteria2 daemon with startup scripts for enhanced scalability and compatibility.
+* Retains installation scripts for Hysteria v1 for user choice.
+* Calculates BDP (Bandwidth-Delay Product) to adjust QUIC parameters for various use cases.
+* Supports adding SOCKS5 outbound, including automatic Warp outbound configuration.
+* Supports all mainstream virtualization methods: LXC, OpenVZ, KVM, etc.
+* Timely updates, with adaptations completed within 24 hours of Hysteria2 updates.
 
 </details>
 
-## 三·使用
+## 3. Usage
 
-### 第一次使用?
+### First Time Using?
 
-#### 1. [防火墙问题](md/firewall.md)
+#### 1. [Firewall Issues](md/firewall.md)
 
-#### 2. [自签证书](md/certificate.md)
+#### 2. [Self-Signed Certificates](md/certificate.md)
 
-#### 3. [限制UDP的服务商排雷列表【2025/01/07更新】](md/blacklist.md)
+#### 3. [List of Service Providers Restricting UDP (Updated 2025/01/07)](md/blacklist.md)
 
-#### 4. [如何设置我的延迟、上、下行速度？](md/speed.md)
+#### 4. [How to Set Latency, Upload, and Download Speeds?](md/speed.md)
 
-#### 5. [支持的客户端](md/client.md)
+#### 5. [Supported Clients](md/client.md)
 
-#### 6. [常见问题](md/issues.md)
+#### 6. [Common Issues](md/issues.md)
 
-#### 7. [启动一个伪装网站](md/masquerade.md)
+#### 7. [Setting Up a Masquerade Website](md/masquerade.md)
 
-### 拉取安装
+### Installation
 
 ```
-su - root #switch to root user.
+su - root # Switch to root user.
 bash <(curl -fsSL https://raw.githubusercontent.com/NamasteIndia/Hi_Hysteria/refs/heads/main/server/install.sh)
 ```
 
-### 配置过程
+### Configuration Process
 
-首次安装后: `hihy`命令调出菜单,如更新了hihy脚本，请执行选项 `9`获得最新的配置
+After the first installation, use the `hihy` command to bring up the menu. If the hihy script is updated, select option `9` to get the latest configuration.
 
-支持通过数字序号直接调取相应功能，例如`hihy 5` 将会重启hysteria2
+You can directly access functions by entering their number, e.g., `hihy 5` to restart Hysteria2.
 
 ```
  -------------------------------------------
@@ -111,189 +113,177 @@ bash <(curl -fsSL https://raw.githubusercontent.com/NamasteIndia/Hi_Hysteria/ref
 |**********    Author: emptysuns   **********|
 |**********     Version: 1.0.3     **********|
  -------------------------------------------
-Tips: hihy  命令再次运行本脚本.
+Tips: Run `hihy` to execute this script again.
 ............................................. 
 ############################### 
 ..................... 
-1)  安装 hysteria2 
-2)  卸载 
+1) Install Hysteria2 
+2) Uninstall 
 ..................... 
-3)  启动 
-4)  暂停 
-5)  重新启动 
-6)  运行状态 
+3) Start 
+4) Stop 
+5) Restart 
+6) Check Status 
 ..................... 
-7)  更新Core 
-8)  查看当前配置 
-9)  重新配置 
-10) 切换ipv4/ipv6优先级 
-11) 更新hihy 
-12) 域名分流/ACL管理 
-13) 查看hysteria2统计信息 
-14) 查看实时日志 
-15) 添加socks5 outbound[支持自动配置warp] 
+7) Update Core 
+8) View Current Configuration 
+9) Reconfigure 
+10) Switch IPv4/IPv6 Priority 
+11) Update hihy 
+12) Domain Routing/ACL Management 
+13) View Hysteria2 Statistics 
+14) View Real-Time Logs 
+15) Add SOCKS5 Outbound [Supports Auto Warp Configuration] 
 ############################### 
-0) 退出 
+0) Exit 
 ............................................. 
-请选择:
+Please select:
 ```
 
-**脚本每次更新都可能会发生改变，请一定要展开并仔细参考演示过程，避免发生不必要的错误！**
+**The script may change with each update. Please carefully review the demonstration process to avoid unnecessary errors!**
 
 <details>
-  <summary>演示较长，点我查看</summary>
+  <summary>The demonstration is lengthy, click to view</summary>
 <pre><blockcode> 
 
-(1/11)请选择证书申请方式:
+(1/11) Please select the certificate application method:
 
-1、使用ACME申请(推荐,需打开tcp 80/443)
-2、使用本地证书文件
-3、自签证书
-4、dns验证
+1) Use ACME (recommended, requires TCP 80/443 open)
+2) Use local certificate file
+3) Self-signed certificate
+4) DNS verification
 
-输入序号:
+Enter number:
 3
-请输入自签证书的域名(默认:apple.com): 
+Enter the domain for the self-signed certificate (default: apple.com): 
 pornhub.a.com     
-->自签证书域名为:pornhub.a.com 
+-> Self-signed certificate domain: pornhub.a.com 
 
-判断客户端连接所使用的地址是否正确?公网ip:1.2.3.4
-请选择:
+Is the address used for client connection correct? Public IP: 1.2.3.4
+Please select:
 
-1、正确(默认)
-2、不正确,手动输入ip
+1) Correct (default)
+2) Incorrect, manually enter IP
 
-输入序号:
+Enter number:
 1
 
+-> You have selected self-signed pornhub.a.com certificate encryption. Public IP: 1.2.3.4
 
-->您已选择自签pornhub.a.com证书加密.公网ip:1.2.3.4
+(2/11) Enter the port you want to open (server port, recommended: 443, default: random 10000-65535) 
+There is no evidence that non-UDP/443 ports are blocked; it’s merely a better masquerade measure. If using port hopping, a random port is recommended.
 
+-> Using random port: udp/43956 
 
+-> (3/11) Enable Port Hopping? Recommended. 
+Tip: Long-term single-port UDP connections are prone to ISP blocking/QoS/disconnection. Enabling this feature effectively avoids this issue.
+For more details, refer to: https://v2.hysteria.network/en/docs/advanced/Port-Hopping/
 
-(2/11)请输入你想要开启的端口,此端口是server端口,推荐443.(默认随机10000-65535) 
-并没有证据表明非udp/443的端口会被阻断,它仅仅是可能有更好的伪装一种措施,如果你使用端口跳跃的话，这里建议使用随机端口 
-   
+Select whether to enable:
 
-->使用随机端口:udp/43956 
+1) Enable (default)
+2) Skip
 
+Enter number:
 
-->(3/11)是否使用端口跳跃(Port Hopping),推荐使用 
-Tip: 长时间单端口 UDP 连接容易被运营商封锁/QoS/断流,启动此功能可以有效避免此问题.
-更加详细介绍请参考: https://v2.hysteria.network/zh/docs/advanced/Port-Hopping/
+-> You have chosen to enable Port Hopping/Multi-Port functionality 
+Port Hopping requires multiple ports. Ensure these ports are not used by other services.
+Tip: Do not select too many ports; around 1000 is recommended, within the range 1-65535. Continuous port ranges are suggested.
 
-选择是否启用:
-
-1、启用(默认)
-2、跳过
-
-输入序号:
-
-
-->您选择启用端口跳跃/多端口(Port Hopping)功能 
-端口跳跃/多端口(Port Hopping)功能需要占用多个端口,请保证这些端口没有监听其他服务
-Tip: 端口选择数量不宜过多,推荐1000个左右,范围1-65535,建议选择连续的端口范围.
-
-请输入起始端口(默认47000): 
+Enter start port (default: 47000): 
 31000
 
-->起始端口:31000 
+-> Start port: 31000 
 
-请输入结束端口(默认48000): 
+Enter end port (default: 48000): 
 32000
 
-->结束端口:32000 
+-> End port: 32000 
 
+-> Your Port Hopping parameters: 31000:32000 
 
-->您选择的端口跳跃/多端口(Port Hopping)参数为: 31000:32000 
-
-(4/11)请输入您到此服务器的平均延迟,关系到转发速度(默认200,单位:ms): 
+(4/11) Enter the average latency to this server, which affects forwarding speed (default: 200, unit: ms): 
 280
 
-->延迟:280 ms
+-> Latency: 280 ms
 
-
-期望速度,这是客户端的峰值速度,服务端默认不受限。Tips:脚本会自动*1.10做冗余，您期望过低或者过高会影响转发效率,请如实填写! 
-(5/11)请输入客户端期望的下行速度:(默认50,单位:mbps): 
+Expected speed is the client’s peak speed; the server is unlimited by default. Tip: The script automatically adds 10% redundancy. Setting it too low or too high affects forwarding efficiency—please enter accurate values!
+(5/11) Enter the desired client download speed (default: 50, unit: mbps): 
 250
 
-->客户端下行速度：250 mbps
+-> Client download speed: 250 mbps
 
-(6/11)请输入客户端期望的上行速度(默认10,单位:mbps):
+(6/11) Enter the desired client upload speed (default: 10, unit: mbps): 
 30
 
-->客户端上行速度：30 mbps
+-> Client upload speed: 30 mbps
 
-(7/11)请输入认证口令(默认随机生成UUID作为密码,建议使用强密码): 
+(7/11) Enter the authentication password (default: random UUID, strong password recommended): 
 
+-> Authentication password: 5a399adf-e12b-450b-8c39-ef11cc566179 
 
-->认证口令:5a399adf-e12b-450b-8c39-ef11cc566179 
+Tip: Using obfuscation (salamander) enhances anti-blocking but increases CPU load, reducing peak speed. If performance is prioritized and no targeted blocking exists, avoid using it.
+(8/11) Use salamander for traffic obfuscation:
 
-Tips: 如果使用obfs混淆,抗封锁能力更强,能被识别为未知udp流量。
-但是会增加cpu负载导致峰值速度下降,如果您追求性能且未被针对封锁建议不使用
-(8/11)是否使用salamander进行流量混淆:
+1) Do not use (recommended)
+2) Use
 
-1、不使用(推荐)
-2、使用
+Enter number:
 
-输入序号:
+-> You have chosen not to use obfuscation
 
+(9/11) Select masquerade type:
 
-->您将不使用混淆
+1) String (default, returns a fixed string)
+2) Proxy (acts as a reverse proxy, serving content from another website)
+3) File (acts as a static file server, serving content from a directory containing index.html)
 
-(9/11)请选择伪装类型:
-
-1、string(默认、返回一个固定的字符串)
-2、proxy(作为一个反向代理，从另一个网站提供内容。)
-3、file(作为一个静态文件服务器，从一个目录提供内容。目录内必须含有index.html)
-
-输入序号:
+Enter number:
 2
-请输入伪装代理地址(默认:https://www.helloworld.org): 
-反代该网址但不会替换网页内域名
+Enter the masquerade proxy address (default: https://www.helloworld.org): 
+Proxies this URL without replacing domains in the webpage
 https://github.com
 
-->伪装代理地址:https://github.com 
+-> Masquerade proxy address: https://github.com 
 
-(10/11)是否同时监听tcp/43956端口来增强伪装行为(做戏做全套): 
-通常网站支持 HTTP/3 的只是将其作为一个升级选项 
-监听一个tcp端口来提供伪装内容,使伪装更加自然,如果不启用此选项,浏览器将在不启用H3功能下访问不了伪装内容
-请选择:
+(10/11) Listen on tcp/43956 to enhance masquerade behavior (complete the act): 
+Typically, websites support HTTP/3 as an upgrade option. 
+Listening on a TCP port provides masquerade content, making it more natural. If disabled, browsers cannot access masquerade content without H3.
+Please select:
 
-1、启用(默认)
-2、跳过
+1) Enable (default)
+2) Skip
 
-输入序号:
+Enter number:
 
+-> You have chosen to listen on tcp/43956
 
-->您选择同时监听tcp/43956端口
-
-(11/11)请输入客户端名称备注(默认使用域名或IP区分,例如输入test,则名称为Hys-test): 
+(11/11) Enter client name remark (default: uses domain or IP, e.g., entering test results in Hy2-test): 
 test
 
-配置录入完成!
- 
-执行配置... 
-开始生成自签名证书...
- 
-生成 CA 私钥... 
+Configuration completed!
+
+Executing configuration... 
+Generating self-signed certificate...
+
+Generating CA private key... 
 Generating RSA private key, 2048 bit long modulus (2 primes)
-生成 CA 证书... 
+Generating CA certificate... 
 Can't load /root/.rnd into RNG
 281012468479616:error:2406F079:random number generator:RAND_load_file:Cannot open file:../crypto/rand/randfile.c:88:Filename=/root/.rnd
-生成服务器私钥和 CSR... 
+Generating server private key and CSR... 
 Can't load /root/.rnd into RNG
 280948454311552:error:2406F079:random number generator:RAND_load_file:Cannot open file:../crypto/rand/randfile.c:88:Filename=/root/.rnd
 Generating a RSA private key
 writing new private key to '/etc/hihy/cert/pornhub.a.com.key'
-使用 CA 签署服务器证书... 
+Signing server certificate with CA... 
 Signature ok
 subject=C = CN, ST = GuangDong, L = ShenZhen, O = PonyMa, OU = Tecent, emailAddress = no-reply@qq.com, CN = pornhub.a.com
 Getting CA Private Key
-清理临时文件... 
-移动 CA 证书到结果目录... 
-证书生成成功！
- 
+Cleaning up temporary files... 
+Moving CA certificate to result directory... 
+Certificate generation successful!
+
 net.core.rmem_max = 77000000
 net.core.wmem_max = 77000000
 net.ipv4.ip_forward = 1
@@ -302,7 +292,7 @@ net.ipv6.conf.all.forwarding = 1
 Test config...
 
 Test success! 
-Port Hopping NAT 规则已添加并持久化。 
+Port Hopping NAT rules added and persisted. 
 IPTABLES OPEN: udp/43956 
 run-parts: executing /usr/share/netfilter-persistent/plugins.d/15-ip4tables save
 run-parts: executing /usr/share/netfilter-persistent/plugins.d/25-ip6tables save
@@ -311,35 +301,34 @@ run-parts: executing /usr/share/netfilter-persistent/plugins.d/15-ip4tables save
 run-parts: executing /usr/share/netfilter-persistent/plugins.d/25-ip6tables save
 Generating config... 
 install.sh: line 305: 21873 Terminated              /etc/hihy/bin/appS -c ${yaml_file} server > ./hihy_debug.info 2>&1
-安装成功,请查看下方配置详细信息 
+Installation successful. See configuration details below.
 Starting hihy...
-启动成功! 
+Started successfully!
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📝 生成客户端配置文件...
+📝 Generating client configuration...
 
-✨ 配置信息如下:
+✨ Configuration details:
 
-📌 当前hysteria2 server版本: app/v2.6.0 
+📌 Current Hysteria2 server version: app/v2.6.0 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-⚠️  安全提示:
-🔒 您使用自签证书,需要:
-   1. 自行修改浏览器信任证书
-   2. 设置hosts使IP指向该域名
+⚠️ Security Notice:
+🔒 You are using a self-signed certificate, requiring:
+   1. Manually trusting the certificate in the browser
+   2. Setting hosts to point the IP to the domain
 
-🌐 1、伪装地址: https://1.2.3.48:43956  
+🌐 1. Masquerade address: https://1.2.3.48:43956  
 
-🔗 2、[v2rayN-Windows/v2rayN-Andriod/nekobox/passwall/Shadowrocket]分享链接:
+🔗 2. [v2rayN-Windows/v2rayN-Android/nekobox/passwall/Shadowrocket] Share link:
  
 hy2://5a399adf-e12b-450b-8c39-ef11cc566179@1.2.3.48:43956/?mport=31000-32000&insecure=1&sni=pornhub.a.com#Hy2-test 
-
 
 █ ▄▄▄▄▄ █▀▀▄▄▄██  █ ▀▀▄▄▄ █▄▀▀█▄▄▄█ ▄▄▄▄▄ █
 
 QR code generated successfully. 
 
-📄 3、[推荐] [Nekoray/V2rayN/NekoBoxforAndroid]原生配置文件,更新最快、参数最全、效果最好。文件地址: ./Hy2-test-v2rayN.yaml  
+📄 3. [Recommended] [Nekoray/V2rayN/NekoBoxforAndroid] Native configuration file, fastest updates, most comprehensive parameters, best performance. File location: ./Hy2-test-v2rayN.yaml  
 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓COPY↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ 
 server: hysteria2://5a399adf-e12b-450b-8c39-ef11cc566179@1.2.3.48:43956,31000-32000/
 tls:
@@ -363,56 +352,56 @@ socks5:
   listen: 127.0.0.1:20808
 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑COPY↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ 
 
-📱 4、[Clash.Mini/ClashX.Meta/Clash.Meta for Android/Clash.verge/openclash] ClashMeta配置文件地址: ./Hy2-test-ClashMeta.yaml  
+📱 4. [Clash.Mini/ClashX.Meta/Clash.Meta for Android/Clash.verge/openclash] ClashMeta configuration file location: ./Hy2-test-ClashMeta.yaml  
 
-✅ 配置生成完成!
+✅ Configuration generation completed!
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-配置修改成功 
+Configuration modified successfully 
 root@localhost:/opt/test# hihy 14
--> 14) 查看实时日志 
+-> 14) View real-time logs 
 2025-01-07T14:53:16Z    INFO    server mode
 2025-01-07T14:53:16Z    INFO    traffic stats server up and running     {"listen": "127.0.0.1:19215"}
 2025-01-07T14:53:16Z    INFO    masquerade HTTPS server up and running  {"listen": ":43956"}
 2025-01-07T14:53:16Z    INFO    server up and running   {"listen": ":43956"}
 ^C
 root@localhost:/opt/test# hihy 13
--> 13) 查看hysteria统计信息 
-=========== Hysteria 服务器状态 ===========
-【流量统计】 
+-> 13) View Hysteria statistics 
+=========== Hysteria Server Status ===========
+【Traffic Statistics】 
 
-【在线用户】 
+【Online Users】 
 
-【活动连接】 
-当前没有活动连接
+【Active Connections】 
+No active connections currently
 
 </blockcode></pre>
 
 </details>
 
-## 四·Todo
+## 4. Todo
 
-**如果您有好的功能建议，请不要忘记开个issue提出来～～～欢迎PR来添加Todo或纠正我的渣代码**
+**If you have good feature suggestions, please open an issue to propose them. PRs are welcome to add to the Todo list or fix my poor code!**
 
-**我的爱好是写bug （￣▽￣）~**
+**My hobby is writing bugs （￣▽￣）~**
 
 ![img](imgs/gugugu.gif)
 
-* [ ] 多用户管理。包括踢用户下线、添加新的用户等等
+* [ ] Multi-user management, including kicking users offline, adding new users, etc.
 
-## 五·结语
+## 5. Conclusion
 
-Hysteria2在高延迟，高丢包网络环境下表现良好，得益于它自创的暴力拥塞控制算法。
+Hysteria2 performs excellently in high-latency, high-packet-loss network environments, thanks to its custom aggressive congestion control algorithm.
 
-这为我们研究相应恶劣的网络环境做出了贡献，本仓库目的是在研究这种恶劣网络环境时给予各位研究人员配置hysteria2的方便，原则上所有hysteria2提供的功能，我们都会支持自定义配置，提供高度定制化内容。
+This repository contributes to research in such harsh network environments by providing researchers with a convenient way to configure Hysteria2. In principle, all features provided by Hysteria2 are supported with highly customizable configurations.
 
-如果您觉得对您学习shell有所帮助，请帮本仓库点一个小小的⭐来让更多人看到本仓库。
+If you find this helpful for learning shell scripting, please give this repository a small ⭐ to help more people discover it.
 
-**不接受任何形式的打赏和广告赞助，请不要浪费issue的曝光机会**
+**No donations or advertising sponsorships are accepted. Please do not waste issue exposure opportunities.**
 
 ![img](./imgs/stickerpack.png)
 
-## 六·鸣谢
+## 6. Acknowledgments
 
 [@apernet/hysteria](https://github.com/HyNetwork/hysteria)
 
@@ -421,3 +410,5 @@ Hysteria2在高延迟，高丢包网络环境下表现良好，得益于它自�
 [@MetaCubeX/Clash.Meta](https://github.com/MetaCubeX/Clash.Meta)
 
 [@fscarmen/warp](https://gitlab.com/fscarmen/warp)
+
+---
