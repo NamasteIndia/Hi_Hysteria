@@ -1393,7 +1393,7 @@ generate_client_config() {
     echo -e "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
 }
 
-generateMetaYaml() {
+generateMetaYaml(){
     remarks=$(getYamlValue "/etc/hihy/conf/backup.yaml" "remarks")
     local metaFile="./Hy2-${remarks}-ClashMeta.yaml"
     if [ -f "${metaFile}" ]; then
@@ -1401,7 +1401,7 @@ generateMetaYaml() {
     fi
     touch ${metaFile}
 
-    cat <<EOF > ${metaFile}
+	cat <<EOF > ${metaFile}
 mixed-port: 7890
 allow-lan: true
 mode: rule
@@ -1485,35 +1485,35 @@ rule-providers:
     path: ./ruleset/greatfire.yaml
     interval: 86400
 
-tld-not-cn:
+  tld-not-cn:
     type: http
     behavior: domain
     url: "https://ghgo.xyz/https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/tld-not-cn.txt"
     path: ./ruleset/tld-not-cn.yaml
     interval: 86400
 
-telegramcidr:
+  telegramcidr:
     type: http
     behavior: ipcidr
     url: "https://ghgo.xyz/https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/telegramcidr.txt"
     path: ./ruleset/telegramcidr.yaml
     interval: 86400
 
-cncidr:
+  cncidr:
     type: http
     behavior: ipcidr
     url: "https://ghgo.xyz/https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/cncidr.txt"
     path: ./ruleset/cncidr.yaml
     interval: 86400
 
-lancidr:
+  lancidr:
     type: http
     behavior: ipcidr
     url: "https://ghgo.xyz/https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/lancidr.txt"
     path: ./ruleset/lancidr.yaml
     interval: 86400
 
-applications:
+  applications:
     type: http
     behavior: classical
     url: "https://ghgo.xyz/https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/applications.txt"
@@ -1538,9 +1538,7 @@ rules:
   - GEOIP,LAN,DIRECT
   - GEOIP,CN,DIRECT
   - MATCH,PROXY
-  
-  EOF
-  }
+EOF
 	serverAddress=$(getYamlValue "/etc/hihy/conf/backup.yaml" "serverAddress")
     port=$(getYamlValue "/etc/hihy/conf/config.yaml" "listen" | awk '{gsub(/^:/, ""); print}')
 	auth_secret=$(getYamlValue "/etc/hihy/conf/config.yaml" "auth.password")
