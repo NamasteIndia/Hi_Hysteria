@@ -383,8 +383,9 @@ getYamlValue() {
     local keyPath=$2 # Key path, dot-separated
 
     # Check if file exists
-    if [[ ! -fесе
-
+if [[ ! -f "$file" ]]; then
+    echo "File does not exist."
+fi
     # Use yq to read the value from the YAML file
     value=$(yq eval ".${keyPath}" "$file")
 
