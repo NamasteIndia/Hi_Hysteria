@@ -1540,6 +1540,7 @@ rules:
   - MATCH,PROXY
   
   EOF
+  }
 	serverAddress=$(getYamlValue "/etc/hihy/conf/backup.yaml" "serverAddress")
     port=$(getYamlValue "/etc/hihy/conf/config.yaml" "listen" | awk '{gsub(/^:/, ""); print}')
 	auth_secret=$(getYamlValue "/etc/hihy/conf/config.yaml" "auth.password")
